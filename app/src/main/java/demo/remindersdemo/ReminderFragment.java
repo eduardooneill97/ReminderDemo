@@ -13,7 +13,6 @@ import java.util.Date;
 
 public class ReminderFragment extends Fragment {
 
-    //private static final String EXTRA_REMINDER_POS = "reminder_position";
     private TextView nameView;
     private TextView descriptionView;
     private TextView dateView;
@@ -28,7 +27,7 @@ public class ReminderFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View v = inflater.inflate(R.layout.reminder_detail_view, container, false);
+        View v = inflater.inflate(R.layout.frgament_reminder_detail_view, container, false);
 
         ConstraintLayout cl = v.findViewById(R.id.header_layout);
         int color = Color.rgb(reminder.getRed(), reminder.getGreen(), reminder.getBlue());

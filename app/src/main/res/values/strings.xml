@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RemindersDemo</string>
+    <string name="alerts_tag">Alerts</string>
+    <string name="tasks_tag">Tasks</string>
 </resources>

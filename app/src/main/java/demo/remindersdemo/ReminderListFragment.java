@@ -2,15 +2,18 @@ package demo.remindersdemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,6 +99,7 @@ public class ReminderListFragment extends Fragment {
         private TextView nameView;
         private TextView descriptionView;
         private TextView timeView;
+        private LinearLayout background;
         private Reminder reminder;
 
         public ReminderViewHolder(LayoutInflater inflater, ViewGroup parent) {
@@ -104,6 +108,7 @@ public class ReminderListFragment extends Fragment {
             nameView = itemView.findViewById(R.id.r_name);
             descriptionView = itemView.findViewById(R.id.r_description);
             timeView = itemView.findViewById(R.id.r_time);
+            background = itemView.findViewById(R.id.background_layout);
             itemView.setOnClickListener(this);
         }
 
@@ -112,6 +117,7 @@ public class ReminderListFragment extends Fragment {
             nameView.setText(reminder.getName());
             descriptionView.setText(reminder.getDescription());
             timeView.setText((new Date(reminder.getDate())).toString());
+            background.setBackgroundColor(Color.rgb(reminder.getRed(),reminder.getGreen(),reminder.getBlue()));
         }
 
         @Override

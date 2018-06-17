@@ -26,10 +26,10 @@ public class RemindersHandler {
         return reminders;
     }
 
-    public int findReminderByID(String id) throws IllegalArgumentException{
+    public int findReminderByID(String id){
         for(int i = 0; i<reminders.size(); i++)
             if(reminders.get(i).getId().equals(id))
                 return i;
-        throw new IllegalArgumentException("Reminder not found");
+        return -1;
     }
 }

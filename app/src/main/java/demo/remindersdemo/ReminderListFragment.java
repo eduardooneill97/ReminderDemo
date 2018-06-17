@@ -1,5 +1,6 @@
 package demo.remindersdemo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,18 +25,31 @@ import java.util.Date;
 import java.util.List;
 
 public class ReminderListFragment extends Fragment {
-    //TODO create class to handle all of the data for the fragment to retrieve.
+
     private RecyclerView remindersView;
     private ReminderAdapter adapter;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private Callbacks callbacks;
+
+    public interface Callbacks{
+        void onReminderSelected(Reminder reminder);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceBundle){
-        View v = inflater.inflate(R.layout.fragment_reminders_list, parent, false);
+    public void onAttach(Context context){
+        super.onAttach(context);
+        callbacks = (Callbacks) context;
+    }
 
-        remindersView = v.findViewById(R.id.list_view);
-        remindersView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        updateUI();
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        callbacks = null;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
 
         DatabaseReference ref = database.getReference("Reminders");
 
@@ -47,9 +61,11 @@ public class ReminderListFragment extends Fragment {
                     Reminder r = snap.getValue(Reminder.class);
                     r.setId(snap.getKey());
                     r.setTaskAndAlertsIDs();
-                    RemindersHandler.get().getReminders().add(r);
-                    updateUI();
+                    int pos = RemindersHandler.get().findReminderByID(r.getId());
+                    if(pos == -1)
+                        RemindersHandler.get().getReminders().add(r);
                 }
+                updateUI();
             }
 
             @Override
@@ -57,18 +73,23 @@ public class ReminderListFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceBundle){
+        View v = inflater.inflate(R.layout.fragment_reminders_list, parent, false);
+
+        remindersView = v.findViewById(R.id.list_view);
+        remindersView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        List<Reminder> remindersList = RemindersHandler.get().getReminders();
+        adapter = new ReminderAdapter(remindersList);
+        remindersView.setAdapter(adapter);
 
         return v;
     }
 
     public void updateUI(){
-        if(adapter == null){
-            List<Reminder> remindersList = RemindersHandler.get().getReminders();
-            adapter = new ReminderAdapter(remindersList);
-            remindersView.setAdapter(adapter);
-        }
-        else
-            adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     private class ReminderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -95,8 +116,7 @@ public class ReminderListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Intent intent = ReminderActivity.newIntent(getActivity(), RemindersHandler.get().findReminderByID(reminder.getId()));
-            startActivity(intent);
+            callbacks.onReminderSelected(reminder);
         }
     }
 

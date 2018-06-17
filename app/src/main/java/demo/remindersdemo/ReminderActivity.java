@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ReminderActivity extends AppCompatActivity {
+public class ReminderActivity extends AppCompatActivity{
 
     private static final String EXTRA_REMINDER_DETAIL_POS = "reminder_detail_pos";
 
@@ -20,8 +20,8 @@ public class ReminderActivity extends AppCompatActivity {
         Fragment reminderDetailFragment = fm.findFragmentById(R.id.reminder_fragment_container);
 
         if(reminderDetailFragment == null){
-            reminderDetailFragment = ReminderFragment.newInstance(getIntent().getIntExtra(EXTRA_REMINDER_DETAIL_POS,0));
-            fm.beginTransaction().add(R.id.reminder_fragment_container, reminderDetailFragment).commit();
+//            reminderDetailFragment = ReminderFragment.newInstance(getIntent().getIntExtra(EXTRA_REMINDER_DETAIL_POS,0));
+//            fm.beginTransaction().add(R.id.reminder_fragment_container, reminderDetailFragment).commit();
         }
     }
 

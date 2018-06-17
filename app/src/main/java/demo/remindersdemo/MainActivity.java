@@ -3,6 +3,7 @@ package demo.remindersdemo;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ReminderListFragment.Callbacks{
 
     //Para obtener la data del databse
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    //FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,5 +37,17 @@ public class MainActivity extends AppCompatActivity {
             fm.beginTransaction().add(R.id.main_view, listViewFragment).commit();
         }
 
+    }
+
+    @Override
+    public void onReminderSelected(Reminder reminder) {
+        FragmentManager fm = getSupportFragmentManager();
+        ReminderFragment rf = ReminderFragment.newInstance(reminder);
+
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.main_view, rf);
+        ft.addToBackStack(null);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
     }
 }

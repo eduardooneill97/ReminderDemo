@@ -60,13 +60,10 @@ public class ReminderListFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap: dataSnapshot.getChildren()) {
-                    Log.d("DATA_B", dataSnapshot.getKey() + "-->" + dataSnapshot.getValue().toString());
                     Reminder r = snap.getValue(Reminder.class);
                     r.setId(snap.getKey());
                     r.setTaskAndAlertsIDs();
-                    int pos = RemindersHandler.get().findReminderByID(r.getId());
-                    if(pos == -1)
-                        RemindersHandler.get().getReminders().add(r);
+                    RemindersHandler.get().addReminder(r);
                 }
                 updateUI();
             }
@@ -99,7 +96,6 @@ public class ReminderListFragment extends Fragment {
         private TextView nameView;
         private TextView descriptionView;
         private TextView timeView;
-        //private LinearLayout background;
         private Reminder reminder;
 
         public ReminderViewHolder(LayoutInflater inflater, ViewGroup parent) {
@@ -108,7 +104,6 @@ public class ReminderListFragment extends Fragment {
             nameView = itemView.findViewById(R.id.r_name);
             descriptionView = itemView.findViewById(R.id.r_description);
             timeView = itemView.findViewById(R.id.r_time);
-            //background = itemView.findViewById(R.id.background_layout);
             itemView.setOnClickListener(this);
         }
 
@@ -117,7 +112,6 @@ public class ReminderListFragment extends Fragment {
             nameView.setText(reminder.getName());
             descriptionView.setText(reminder.getDescription());
             timeView.setText((new Date(reminder.getDate())).toString());
-            //background.setBackgroundColor(Color.rgb(reminder.getRed(),reminder.getGreen(),reminder.getBlue()));
         }
 
         @Override
